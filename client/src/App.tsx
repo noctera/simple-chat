@@ -1,8 +1,16 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { useEffect } from 'react';
+const socketIOClient = require("socket.io-client");
 
 function App() {
+  useEffect(() => {
+    const socket = socketIOClient();
+    socket.on("FromAPI", () => {
+    });
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
