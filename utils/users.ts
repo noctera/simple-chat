@@ -6,7 +6,7 @@ interface User {
 
 const users: User[] = [];
 
-const joinUser = (id: number, name: string, room: string) => {
+export const joinUser = (id: number, name: string, room: string) => {
 
     const tempUser: User = {id, name, room}; 
     users.push(tempUser);
@@ -14,7 +14,7 @@ const joinUser = (id: number, name: string, room: string) => {
     return tempUser;
 }
 
-const disconnectUser = (id: number) => {
+export const disconnectUser = (id: number) => {
     const index = users.findIndex((user) => user.id === id);
 
     if (index !== -1) {
@@ -22,12 +22,6 @@ const disconnectUser = (id: number) => {
     }
 }
 
-const getUserById = (id: number) => {
+export const getUserById = (id: number) => {
     return users.find((user) => user.id === id);
-}
-
-module.exports = {
-    joinUser,
-    disconnectUser,
-    getUserById,
 }

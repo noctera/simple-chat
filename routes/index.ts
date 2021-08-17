@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 
-router.get('/', function (req, res) {
+router.get('/', function (req: any, res: any) {
   res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
 });
 
