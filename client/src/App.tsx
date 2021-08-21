@@ -1,30 +1,36 @@
 import React from 'react';
-import { HashRouter, Switch, Route } from "react-router-dom";
-import './App.css';
+import { BrowserRouter , Switch, Route, Redirect } from "react-router-dom";
+import './App.scss';
 import { useEffect } from 'react';
 
-import Home from "./screens/Home";
-import Chat from "./screens/Chat";
+import Home from "./screens/Home/Home";
+import Chat from "./screens/Chat/Chat";
 
 const socketIOClient = require("socket.io-client");
+
 
 const socket = socketIOClient();
 
 function App() {
 
   return (
-    <HashRouter>
+    <BrowserRouter>
       <div className="App">
-      <Switch>
-        <Route path="/">
-          <Home socket={socket} />
-        </Route>
-        <Route path="/chat/:roomname/:username">
-          <Chat socket={socket} />
-        </Route>
-      </Switch>
+        <div className="inner-wrapper">
+          <Switch>
+            <Route path="/home">
+              <Home socket={socket}/>
+            </Route>
+            <Route path="/chat/:room/:username">
+              <Chat socket={socket} />
+            </Route>
+            <Route path="/">
+                <Redirect to="/home" />
+              </Route>
+          </Switch>
+        </div>
       </div>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 

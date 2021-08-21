@@ -41,18 +41,20 @@ io.on("connection", (socket: any) => {
     console.log("user connected");
     socket.on("joinRoom", ({username, room}: joinRoomProps) => {
       const tempUser = joinUser(socket.id, username, room);
+      console.log(tempUser)
+      console.log("userJoined");
 
       // send message to user who joined
       socket.emit("message", {
         userId: tempUser.id,
-        username: tempUser.name,
+        username: "Bot",
         text: `You are now in the ${tempUser.room} room`
       })
 
       //send notify message to other users that are in the same room
-      socket.broadcast.to(tempUser.room).emit("message", {
+      socket.to(tempUser.room).emit("message", {
         userId: tempUser.id,
-        username: tempUser.name,
+        username: "Bot",
         test: `${tempUser.name} has joined the chat`
       })
     })
@@ -60,8 +62,9 @@ io.on("connection", (socket: any) => {
     socket.on("messageSent", ({message}: messageSentProps) => {
       //find username by the socket id
       const tempUser = getUserById(socket.id);
+      console.log(tempUser);
 
-      io.broadcast.to(tempUser.room).emit("message", {
+      socket.to(tempUser.room).emit("message", {
         userId: tempUser.id,
         username: tempUser.name,
         text: message
