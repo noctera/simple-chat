@@ -5,6 +5,10 @@
     "main": "server.js",
     "scripts": {
         "start": "npx ts-node-dev server.ts",
+        "build-start": "cd client && npm run build && cd .. && npx ts-node-dev server.ts",
+        "build-frontend": "cd client && npm run build",
+        "build-final": "cd client && npm run build && cd .. && tsc -p .",
+
         "dev": "nodemon server.ts"
     },
     "repository": {

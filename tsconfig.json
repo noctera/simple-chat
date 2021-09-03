@@ -17,6 +17,10 @@
         }
     },
     "include": [
-        "src/**/*"
+        "server.ts",
+        "client/build/**/*",
+        "utils/**/*",
+        "sockets/**/*",
+        "routes/**/*"
     ]
 }
