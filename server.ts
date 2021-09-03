@@ -9,7 +9,6 @@ import {joinUser, getUserById, disconnectUser} from "./utils/users";
 
 const routes = require("./routes/index")
 
-
 app.use(cors());
 app.use('/', routes);
 
@@ -24,66 +23,12 @@ const server = app.listen(
   )
 );
 
-const io = socket(server);
-
-//initializing the socket io connection 
-
-interface joinRoomProps {
-  username: string,
-  room: string
-}
-
-interface messageSentProps {
-  message: string
-}
+const io = socket(server); 
 
 io.on("connection", (socket: any) => {
-    console.log("user connected");
-    socket.on("joinRoom", ({username, room}: joinRoomProps) => {
-      const tempUser = joinUser(socket.id, username, room);
-      console.log(tempUser)
-      console.log("userJoined");
-
-      // send message to user who joined
-      socket.emit("message", {
-        userId: tempUser.id,
-        username: "Bot",
-        text: `You are now in the ${tempUser.room} room`
-      })
-
-      //send notify message to other users that are in the same room
-      socket.to(tempUser.room).emit("message", {
-        userId: tempUser.id,
-        username: "Bot",
-        test: `${tempUser.name} has joined the chat`
-      })
-    })
-
-    socket.on("messageSent", ({message}: messageSentProps) => {
-      //find username by the socket id
-      const tempUser = getUserById(socket.id);
-      console.log(tempUser);
-
-      socket.to(tempUser.room).emit("message", {
-        userId: tempUser.id,
-        username: tempUser.name,
-        text: message
-      })
-    })
-
-    //when the user exits the room
-    socket.on("disconnect", () => {
-        const tempUser = disconnectUser(socket.id);
-
-        if(tempUser) {
-          io.broadcast.to(tempUser.room).emit("message", {
-            userId: tempUser.id,
-            username: tempUser.name,
-            text: `${tempUser.name} left the chat`
-          })
-        }
-        
-    });
+  require('./sockets/joinUser')(io, socket);
+  require('./sockets/sendMessage')(io, socket);
+  require('./sockets/disconnect')(io, socket);
 });
 
 
